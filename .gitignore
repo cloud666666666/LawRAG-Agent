@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+.python-version
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Caches
+.ruff_cache/
+.pytest_cache/
+.ipynb_checkpoints/
+.cache/
+.huggingface/
+
+# Project data
+models/
+data/processed/
+data/indexes/
+data/tmp/
+outputs/
+logs/
+checkpoints/
+
+# Others
+*.log
