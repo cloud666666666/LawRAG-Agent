@@ -1,0 +1,56 @@
+# 性能优化配置文件
+# 模型配置
+models:
+  device: "cuda:5"  # 设备选择: cuda:0, cuda:1, cpu
+  precision: "float16"  # 精度: float16, float32
+  use_cache: true  # 是否使用模型缓存
+  max_memory_usage: 8000  # 最大内存使用量(MB)
+
+# 批处理配置
+batch_processing:
+  embedding_batch_size: 32  # 向量化批处理大小
+  chunk_batch_size: 1  # 分块处理批大小
+  max_concurrent_operations: 4  # 最大并发操作数
+
+# 文本处理配置
+text_processing:
+  summary_limit: 80  # 摘要长度限制
+  max_text_length: 4000  # 最大文本长度
+  enable_caching: true  # 启用文本处理缓存
+  cache_size: 1000  # 缓存大小
+
+# 索引配置
+indexing:
+  use_gpu: true  # 是否使用GPU加速索引
+  normalize_embeddings: true  # 是否标准化向量
+  index_type: "flat"  # 索引类型: flat, ivf, hnsw
+
+# 性能监控配置
+monitoring:
+  enable_performance_logging: true  # 启用性能日志
+  log_file: "performance_log.json"  # 日志文件路径
+  memory_check_interval: 10  # 内存检查间隔(秒)
+  enable_profiling: true  # 启用性能分析
+
+# 内存管理配置
+memory_management:
+  auto_cleanup: true  # 自动清理内存
+  cleanup_interval: 100  # 清理间隔(操作次数)
+  max_memory_threshold: 0.8  # 最大内存使用阈值
+  enable_gc: true  # 启用垃圾回收
+
+# 文件路径配置
+paths:
+  input_file: "data/origin/民法典.txt"
+  output_file: "data/processed/chunks.jsonl"
+  index_file: "data/index/faiss.index"
+  models_dir: "models"
+  logs_dir: "logs"
+
+# 优化建议
+optimization_hints:
+  - "使用float16精度可以减少内存使用"
+  - "增加批处理大小可以提高处理速度"
+  - "启用缓存可以减少重复计算"
+  - "定期清理内存可以避免内存泄漏"
+  - "使用GPU可以加速向量化处理"
