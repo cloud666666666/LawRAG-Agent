@@ -188,8 +188,16 @@ def format_docs(docs: List[Document]) -> str:
     
     return "\n".join(formatted_docs)
 
-def create_law_rag_chain():
-    """创建法律RAG链"""
+def create_law_rag_chain(use_lora=True):
+    """
+    创建法律RAG链
+    
+    参数:
+    - use_lora: 是否使用LoRA微调模型
+    
+    返回:
+    - chain: 法律RAG链
+    """
     # 加载向量存储
     vector_path = "data/vectors"
     text_store = CustomVectorStore(vector_path, "text_vector")
@@ -206,8 +214,8 @@ def create_law_rag_chain():
     retrievers = [text_retriever, summary_retriever]
     weights = [0.5, 0.5]  # 权重相等
     
-    # 加载大语言模型
-    llm, tokenizer = llm_load()
+    # 加载大语言模型，指定是否使用LoRA微调模型
+    llm, tokenizer = llm_load(use_lora=use_lora)
     
     # 创建提示模板
     prompt = ChatPromptTemplate.from_messages([
@@ -268,10 +276,19 @@ def create_law_rag_chain():
     
     return chain
 
-def process_query(query: str) -> Dict[str, Any]:
-    """处理单个查询"""
-    # 创建RAG链
-    chain = create_law_rag_chain()
+def process_query(query: str, use_lora: bool = True) -> Dict[str, Any]:
+    """
+    处理单个查询
+    
+    参数:
+    - query: 查询文本
+    - use_lora: 是否使用LoRA微调模型
+    
+    返回:
+    - 包含查询、回答和用时的字典
+    """
+    # 创建RAG链，指定是否使用LoRA模型
+    chain = create_law_rag_chain(use_lora=use_lora)
     
     # 执行查询
     start_time = time.time()
@@ -282,11 +299,21 @@ def process_query(query: str) -> Dict[str, Any]:
     return {
         "query": query,
         "answer": answer,
-        "time": elapsed
+        "time": elapsed,
+        "model": "LoRA微调模型" if use_lora else "基础模型"
     }
 
-def process_queries_from_file(file_path: str) -> List[Dict[str, Any]]:
-    """从文件处理多个查询"""
+def process_queries_from_file(file_path: str, use_lora: bool = True) -> List[Dict[str, Any]]:
+    """
+    从文件处理多个查询
+    
+    参数:
+    - file_path: 查询文件路径
+    - use_lora: 是否使用LoRA微调模型
+    
+    返回:
+    - 查询结果列表
+    """
     # 读取查询
     queries = []
     with open(file_path, "r", encoding="utf-8") as f:
@@ -298,7 +325,7 @@ def process_queries_from_file(file_path: str) -> List[Dict[str, Any]]:
     # 处理查询
     results = []
     for query in tqdm(queries, desc="处理查询"):
-        result = process_query(query)
+        result = process_query(query, use_lora=use_lora)
         results.append(result)
     
     return results
@@ -306,34 +333,51 @@ def process_queries_from_file(file_path: str) -> List[Dict[str, Any]]:
 def main():
     """主函数"""
     import time
+    import argparse
+    
+    # 创建参数解析器
+    parser = argparse.ArgumentParser(description="法律RAG助手")
+    parser.add_argument("--query", type=str, help="要处理的查询")
+    parser.add_argument("--file", type=str, default="example_queries.txt", 
+                        help="包含多个查询的文件")
+    parser.add_argument("--output", type=str, default="data/results/langchain_answers.json", 
+                        help="输出结果文件路径")
+    parser.add_argument("--no-lora", action="store_true", 
+                        help="不使用LoRA微调模型，使用基础模型")
     
     # 解析命令行参数
-    if len(sys.argv) > 1:
-        # 从命令行参数获取查询
-        query = sys.argv[1]
-        result = process_query(query)
+    args = parser.parse_args()
+    use_lora = not args.no_lora
+    model_type = "LoRA微调模型" if use_lora else "基础模型"
+    
+    if args.query:
+        # 处理单个查询
+        print(f"使用{model_type}处理查询...")
+        result = process_query(args.query, use_lora=use_lora)
         print(f"\n问题: {result['query']}")
         print(f"\n回答: {result['answer']}")
         print(f"\n用时: {result['time']:.2f}秒")
-    elif os.path.exists("example_queries.txt"):
+        print(f"\n使用模型: {result['model']}")
+    elif os.path.exists(args.file):
         # 从文件处理查询
-        print("从文件处理查询...")
-        results = process_queries_from_file("example_queries.txt")
+        print(f"使用{model_type}从文件处理查询...")
+        results = process_queries_from_file(args.file, use_lora=use_lora)
         
         # 保存结果
-        output_path = "data/results/langchain_answers.json"
-        os.makedirs(os.path.dirname(output_path), exist_ok=True)
-        with open(output_path, "w", encoding="utf-8") as f:
+        os.makedirs(os.path.dirname(args.output), exist_ok=True)
+        with open(args.output, "w", encoding="utf-8") as f:
             json.dump(results, f, ensure_ascii=False, indent=2)
         
-        print(f"处理完成，结果已保存到: {output_path}")
+        print(f"处理完成，结果已保存到: {args.output}")
     else:
         # 使用默认查询
         query = "民事行为能力"
-        result = process_query(query)
+        print(f"使用{model_type}处理默认查询...")
+        result = process_query(query, use_lora=use_lora)
         print(f"\n问题: {result['query']}")
         print(f"\n回答: {result['answer']}")
         print(f"\n用时: {result['time']:.2f}秒")
+        print(f"\n使用模型: {result['model']}")
 
 if __name__ == "__main__":
     try:
