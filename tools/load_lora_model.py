@@ -7,7 +7,7 @@ from peft import PeftModel, PeftConfig
 
 def load_lora_model(base_model_path="models/qwen2.5-7b-instruct", 
                    lora_model_path="models/qwen2.5-7b-law-lora",
-                   device="cuda:0"):
+                   device="cuda:1"):
     """
     加载LoRA微调后的模型
     

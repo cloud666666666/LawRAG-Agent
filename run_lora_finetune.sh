@@ -21,7 +21,7 @@ source /data/nway818/LawRAG-Agent/.venv/bin/activate
 cd /data/nway818/LawRAG-Agent
 
 # 设置CUDA可见设备
-export CUDA_VISIBLE_DEVICES=0
+export CUDA_VISIBLE_DEVICES=1
 
 # 打印环境信息
 echo "Python版本: $(python --version)"

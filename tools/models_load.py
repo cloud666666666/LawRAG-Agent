@@ -8,7 +8,7 @@ llm_path="models/qwen2.5-7b-instruct"
 embedding_path="models/bge-m3"
 rerank_path="models/bge-reranker-v2-m3"
 lora_path="models/qwen2.5-7b-law-lora"
-device="cuda:0"
+device="cuda:1"
 
 def llm_load(use_lora=True):
     """
