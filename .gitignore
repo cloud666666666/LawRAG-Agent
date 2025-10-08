@@ -30,6 +30,8 @@ data/tmp/
 outputs/
 logs/
 checkpoints/
+data
+results
 
 # Others
 *.log

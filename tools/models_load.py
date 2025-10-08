@@ -4,7 +4,7 @@ from FlagEmbedding import FlagReranker
 llm_path="models/qwen2.5-7b-instruct"
 embedding_path="models/bge-m3"
 rerank_path="models/bge-reranker-v2-m3"
-device="cuda:5"
+device="cuda:0"
 def llm_load():
     """
     加载本地大语言模型
