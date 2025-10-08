@@ -38,8 +38,11 @@ logger = logging.getLogger(__name__)
 # 默认参数
 DEFAULT_MODEL_PATH = "models/qwen2.5-7b-instruct"
 DEFAULT_OUTPUT_DIR = "models/qwen2.5-7b-law-lora"
-DEFAULT_TRAIN_FILE = "data/processed/train_data.json"
-DEFAULT_VAL_FILE = "data/processed/val_data.json"
+# 直接使用已处理的 DISC-Law-SFT 数据集作为默认训练/验证集
+# 如需改回使用 data/processed 下由 prepare_finetune_data.py 生成的数据，
+# 可将以下两行改回原先的 data/processed/train_data.json 与 val_data.json
+DEFAULT_TRAIN_FILE = "data/lora/DISC-Law-SFT-Pair_processed.json"
+DEFAULT_VAL_FILE = "data/lora/DISC-Law-SFT-Pair-QA-released_processed.json"
 
 def parse_args():
     """解析命令行参数"""
