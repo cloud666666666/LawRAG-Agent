@@ -396,10 +396,7 @@ if __name__ == "__main__":
     try:
         # 确保目录存在
         os.makedirs('data/results', exist_ok=True)
-        
-        # 应用重排序模型修复
-        print("应用重排序模型修复...")
-        apply_fixes()
+
         
         # 运行主函数
         main()
