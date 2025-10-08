@@ -30,7 +30,7 @@ echo "当前目录: $(pwd)"
 
 # 步骤1: 下载数据集
 echo "=== 步骤1: 下载数据集 ==="
-python tools/dataset_download.py --dataset dzunggg/legal-qa-v1 --output_dir data/lora --format jsonl
+python tools/dataset_download.py --dataset ShengbinYue/DISC-Law-SFT --output_dir data/lora --format jsonl --direct_download
 
 # 步骤2: 准备微调数据
 echo "=== 步骤2: 准备微调数据 ==="

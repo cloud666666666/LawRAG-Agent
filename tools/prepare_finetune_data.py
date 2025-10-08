@@ -54,7 +54,11 @@ def load_qa_data(input_dir: str) -> List[Dict[str, Any]]:
         os.path.join(input_dir, "qa_data.json"),
         os.path.join(input_dir, "law_qa.json"),
         os.path.join("data/lora", "legal-qa-v1.json"),
-        os.path.join("data/lora", "legal-qa-v1.jsonl")
+        os.path.join("data/lora", "legal-qa-v1.jsonl"),
+        os.path.join("data/lora", "DISC-Law-SFT-Pair-QA-released_processed.json"),
+        os.path.join("data/lora", "DISC-Law-SFT-Pair_processed.json"),
+        os.path.join("data/lora", "DISC-Law-SFT-Triplet-QA-released_processed.json"),
+        os.path.join("data/lora", "DISC-Law-SFT-Triplet-released_processed.json")
     ]
     
     for qa_file in qa_files:
