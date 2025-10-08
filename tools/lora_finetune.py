@@ -170,6 +170,10 @@ def main():
     # 解析参数
     args = parse_args()
     
+    # 若外部未指定可见GPU，则默认固定到第2块卡（cuda:1）
+    if "CUDA_VISIBLE_DEVICES" not in os.environ or not os.environ["CUDA_VISIBLE_DEVICES"].strip():
+        os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+    
     # 确保输出目录存在
     os.makedirs(args.output_dir, exist_ok=True)
     
@@ -240,7 +244,7 @@ def main():
         logging_steps=args.logging_steps,
         save_steps=args.save_steps,
         save_total_limit=3,
-        evaluation_strategy="steps" if val_dataset else "no",
+        eval_strategy="steps" if val_dataset else "no",
         eval_steps=args.save_steps if val_dataset else None,
         report_to="tensorboard",
         fp16=not (args.use_4bit or args.use_8bit),  # 如果使用量化，则不使用fp16

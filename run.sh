@@ -7,7 +7,7 @@
 #SBATCH --ntasks=1                    # 任务数
 #SBATCH --cpus-per-task=4             # 每个任务的CPU核心数
 #SBATCH --mem=16G                     # 内存需求
-#SBATCH --gres=gpu:1                  # 请求1个GPU
+#SBATCH --gres=gpu:1                  # 请求1个GPU（不限定型号）
 #SBATCH --mail-type=BEGIN,END,FAIL    # 邮件通知类型（可选）
 ##SBATCH --mail-user=nway818@aucklanduni.ac.nz 接收邮件的地址（可选，取消注释并修改）
 
@@ -27,7 +27,7 @@ source /data/nway818/LawRAG-Agent/.venv/bin/activate
 cd /data/nway818/LawRAG-Agent
 
 # 设置CUDA可见设备
-export CUDA_VISIBLE_DEVICES=0
+export CUDA_VISIBLE_DEVICES=1
 
 # 打印环境信息
 echo "Python版本: $(python --version)"
@@ -36,6 +36,6 @@ echo "当前目录: $(pwd)"
 
 # 运行摘要生成脚本
 # 可以根据需要修改以下参数
-/data/nway818/LawRAG-Agent/.venv/bin/python tools/generate_summaries.py 
+/data/nway818/LawRAG-Agent/.venv/bin/python tools/lora_finetune.py 
 # 打印完成信息
 echo "作业完成时间: $(date)"
